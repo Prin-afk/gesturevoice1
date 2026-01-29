@@ -1,143 +1,69 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
-      const response = await fetch("http://localhost:4000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+      const res = await axios.post("http://localhost:4000/api/auth/login", {
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.error || "Login failed!");
-        return;
-      }
-
-      // ✅ Save JWT to localStorage
-      localStorage.setItem("token", data.token);
-
-      alert("Login successful!");
-      navigate("/dashboard"); // Redirect after successful login
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Something went wrong!");
+      localStorage.setItem("token", res.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Invalid credentials");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-6 relative">
-      {/* ✅ Back Button */}
+    <div className="min-h-screen flex items-center justify-center">
+       {/* Back Button */}
       <button
         onClick={() => navigate("/")}
-        style={{
-          background: "#6a1b9a",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          padding: "10px 20px",
-          cursor: "pointer",
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-        }}
+        className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 backdrop-blur-md text-gray-700 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition"
       >
-        ⬅ Back
+        ← Back
       </button>
-
-      <motion.div
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-md p-8"
+      <form
+        onSubmit={handleLogin}
+        className="bg-white p-6 rounded shadow w-96"
       >
-        <h1 className="text-3xl font-bold text-white text-center mb-6 tracking-wide">
-          Welcome Back
-        </h1>
-        <p className="text-white/80 text-center mb-8">
-          Please sign in to continue
-        </p>
+        <h2 className="text-xl font-semibold mb-4 text-center">Login</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-white mb-1"
-            >
-              Email Address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
-              required
-            />
-          </div>
+        {error && <p className="text-red-500 text-center mb-2">{error}</p>}
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-white mb-1"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
-              required
-            />
-          </div>
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 border mb-3"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-          <div className="flex justify-between items-center text-sm text-white/80">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="accent-indigo-500" /> Remember me
-            </label>
-            <a href="#" className="hover:underline">
-              Forgot password?
-            </a>
-          </div>
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-2 border mb-4"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-          <button
-            type="submit"
-            className="w-full py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition duration-200 shadow-lg"
-          >
-            Sign In
-          </button>
-        </form>
-
-        <p className="text-center text-white/70 mt-6 text-sm">
-          Don’t have an account?{" "}
-          <a href="/signup" className="text-white font-semibold hover:underline">
-            Sign Up
-          </a>
-        </p>
-      </motion.div>
+        <button className="w-full bg-green-700 text-white py-2 rounded">
+          Login
+        </button>
+      </form>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import ConfirmAlertModal from "../components/ConfirmAlertModal";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
+import homeImage from "./login.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -261,6 +262,15 @@ const Dashboard = () => {
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
+      {/* 🔹 Full Screen Background Image */}
+            <img
+              src={homeImage}
+              alt="GestureVoice background"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+      
+            {/* 🔹 Dark Overlay for Readability */}
+            <div className="absolute inset-0 bg-black/40"></div>
       <BackButton />
       <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-500 to-pink-500 p-6 text-white flex justify-center items-center">
         <ConfirmAlertModal
@@ -277,11 +287,12 @@ const Dashboard = () => {
         >
           <h1 className="text-3xl font-bold text-center mb-4">✋ GestureVoice</h1>
           <div className="text-center mb-4">
-            <button onClick={() => navigate("/learning")} className="px-4 py-2 bg-blue-600 rounded-lg text-white shadow-md hover:bg-blue-700">🎓 Go to Learning Module</button>
+            <button onClick={() => navigate("/learning")} className="px-4 py-2 bg-green-600 rounded-lg text-white shadow-md hover:bg-blue-700">🎓 Go to Learning Module</button>
           </div>
           <div className="text-center mb-4">
-            <button onClick={handleLogout} className="px-4 py-2 bg-red-600 rounded-lg text-white shadow-md hover:bg-red-700">🚪 Logout</button>
+            <button onClick={handleLogout} className="px-4 py-2 bg-green-600 rounded-lg text-white shadow-md hover:bg-red-700">🚪 Logout</button>
           </div>
+
           <p className="text-center text-white/80 mb-6">Capture gestures, translate words, and trigger emergency alerts.</p>
           {profile && (
             <div className="bg-white/30 text-black rounded-xl p-4 mb-6 shadow-md">
@@ -291,7 +302,7 @@ const Dashboard = () => {
               {!editMode ? (
                 <>
                   <p><strong>Emergency Number:</strong> {profile.user?.emergencyNumber || "Not set"}</p>
-                  <button onClick={() => setEditMode(true)} className="mt-3 px-4 py-2 bg-blue-600 rounded-lg">✏️ Edit</button>
+                  <button onClick={() => setEditMode(true)}  className="px-4 py-2 bg-green-600 rounded-lg text-white">✏️ Edit</button>
                 </>
               ) : (
                 <div className="mt-4 space-y-3">
@@ -317,12 +328,12 @@ const Dashboard = () => {
             <video ref={videoRef} autoPlay playsInline className={`rounded-xl shadow-lg mb-4 ${cameraActive ? "block" : "hidden"}`} width="480" height="360" />
             {preview && <img src={preview} alt="Captured" className="rounded-xl shadow-md mb-4 w-48 border border-white/40" />}
             <div className="flex gap-3">
-              <button onClick={toggleCamera} className="px-4 py-2 bg-blue-600 rounded-lg">{cameraActive ? "Close Camera" : "Open Camera"}</button>
+              <button onClick={toggleCamera} className="px-4 py-2 bg-green-600 rounded-lg">{cameraActive ? "Close Camera" : "Open Camera"}</button>
               {cameraActive && <button onClick={captureFrame} className="px-4 py-2 bg-green-600 rounded-lg">Capture Frame</button>}
             </div>
           </div>
           <div className="text-center mb-6">
-            <label className="cursor-pointer bg-indigo-600 px-4 py-2 rounded-lg">📁 Upload Image or Short Video<input type="file" accept="image/*,video/*" onChange={handleFileUpload} className="hidden" /></label>
+            <label className="cursor-pointer bg-green-600 px-4 py-2 rounded-lg">📁 Upload Image or Short Video<input type="file" accept="image/*,video/*" onChange={handleFileUpload} className="hidden" /></label>
           </div>
           <div className="mb-6">
             <label className="block mb-2 font-semibold text-white">Enter or confirm recognized sign:</label>

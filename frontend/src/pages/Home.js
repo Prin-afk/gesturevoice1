@@ -1,65 +1,70 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import homeImage from "./login.png"; // your image
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white p-8">
-      <motion.h1
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-5xl font-extrabold mb-10 drop-shadow-lg"
-      >
-        ✋ GestureVoice
-      </motion.h1>
+    <div className="relative min-h-screen">
 
-      <div className="flex flex-col gap-4 w-full max-w-xs">
-        <button
-          onClick={() => navigate("/signup")}
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl shadow-lg"
-        >
-          📝 Sign Up
-        </button>
+      {/* 🔹 Full Screen Background Image */}
+      <img
+        src={homeImage}
+        alt="GestureVoice background"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
 
-        <button
-          onClick={() => navigate("/login")}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-lg"
-        >
-          🔐 Login
-        </button>
+      {/* 🔹 Dark Overlay for Readability */}
+      <div className="absolute inset-0 bg-black/40"></div>
 
-        {/* 🆕 Updated Try Gesture Button */}
-        <button
-          onClick={() => navigate("/try-gesture")}
-          style={{
-            background: "#6a1b9a",
-            color: "white",
-            padding: "12px 30px",
-            borderRadius: "10px",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: "600",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-            transition: "background 0.3s ease",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "#8e24aa")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "#6a1b9a")
-          }
+      {/* 🔹 Content */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl p-12 max-w-md w-full text-center"
         >
-          ✋ Try Gesture Text & Voice
-        </button>
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl font-extrabold text-gray-800 mb-4"
+          >
+            ✋ GestureVoice
+          </motion.h1>
+
+          <p className="text-gray-600 text-sm mb-8">
+            Experience real-time sign-to-speech and multilingual translation —
+            even without an account.
+          </p>
+
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={() => navigate("/signup")}
+              className="bg-green-800 hover:bg-green-900 text-white font-semibold py-3 rounded-lg transition shadow"
+            >
+              Sign Up
+            </button>
+
+            <button
+              onClick={() => navigate("/login")}
+              className="border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold py-3 rounded-lg transition"
+            >
+              Login
+            </button>
+
+            <button
+              onClick={() => navigate("/try-gesture")}
+              className="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-3 rounded-lg transition shadow"
+            >
+              Try Gesture Text & Voice
+            </button>
+          </div>
+        </motion.div>
       </div>
-
-      <p className="mt-10 text-white/80 text-center max-w-md">
-        Experience real-time sign-to-speech and multilingual translation — even
-        without an account!
-      </p>
     </div>
   );
 };

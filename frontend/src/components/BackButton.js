@@ -7,20 +7,10 @@ const BackButton = () => {
   return (
     <button
       onClick={() => navigate(-1)}
-      style={{
-        background: "#fff",
-        color: "#6a1b9a",
-        padding: "10px 20px",
-        borderRadius: "8px",
-        border: "none",
-        fontWeight: "bold",
-        cursor: "pointer",
-        position: "absolute",
-        top: "20px",
-        left: "20px",
-      }}
+      className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 backdrop-blur-md text-gray-700 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition"
+      
     >
-      ⬅ Back
+       ← Back
     </button>
   );
 };

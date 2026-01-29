@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import signupImage from "./login.png"; // use same or another image
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -28,7 +29,10 @@ const Signup = () => {
     setMessage("");
 
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/signup", formData);
+      const res = await axios.post(
+        "http://localhost:4000/api/auth/signup",
+        formData
+      );
 
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
@@ -43,154 +47,144 @@ const Signup = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-6 relative" // Added 'relative' for absolute positioning
-    >
-      {/* Back button added here */}
+    <div className="min-h-screen flex items-center justify-center bg-neutral-200 p-6 relative">
+
+      {/* Back Button */}
       <button
         onClick={() => navigate("/")}
-        style={{
-          background: "#6a1b9a",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          padding: "10px 20px",
-          cursor: "pointer",
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-        }}
+        className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 backdrop-blur-md text-gray-700 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition"
       >
-        ⬅ Back
+        ← Back
       </button>
 
+      {/* Card */}
       <motion.div
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white/20 backdrop-blur-xl shadow-2xl rounded-2xl w-full max-w-lg p-8"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2"
       >
-        <h1 className="text-3xl font-bold text-white text-center mb-4">
-          Create an Account
-        </h1>
-        <p className="text-center text-white/80 mb-8">
-          Fill in your details to get started
-        </p>
+        {/* Left Form Section */}
+        <div className="p-10 overflow-y-auto max-h-[90vh]">
+          <h1 className="text-2xl font-semibold mb-2">Create an Account</h1>
+          <p className="text-gray-500 mb-8 text-sm">
+            Fill in your details to get started
+          </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-white mb-1">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              placeholder="John Doe"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-white mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none"
+              />
+            </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-white mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none"
+              />
+            </div>
 
-          {/* Emergency Email */}
-          <div>
-            <label className="block text-sm font-medium text-white mb-1">
-              Emergency Email
-            </label>
-            <input
-              type="email"
-              name="emergency_email"
-              placeholder="mom@example.com"
-              value={formData.emergency_email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none"
+              />
+            </div>
 
-          {/* Emergency Number */}
-          <div>
-            <label className="block text-sm font-medium text-white mb-1">
-              Emergency Contact Number
-            </label>
-            <input
-              type="tel"
-              name="emergencyNumber"
-              placeholder="+1 234 567 890"
-              value={formData.emergencyNumber}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Emergency Email
+              </label>
+              <input
+                type="email"
+                name="emergency_email"
+                value={formData.emergency_email}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none"
+              />
+            </div>
 
-          {/* Trigger Word */}
-          <div>
-            <label className="block text-sm font-medium text-white mb-1">
-              Trigger Word
-            </label>
-            <input
-              type="text"
-              name="triggerWord"
-              placeholder="e.g., HELP123"
-              value={formData.triggerWord}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-lg bg-white/80 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Emergency Contact Number
+              </label>
+              <input
+                type="tel"
+                name="emergencyNumber"
+                value={formData.emergencyNumber}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none"
+              />
+            </div>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full mt-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-lg hover:bg-blue-700 transition duration-200 shadow-lg"
-          >
-            Sign Up
-          </button>
-        </form>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Trigger Word
+              </label>
+              <input
+                type="text"
+                name="triggerWord"
+                value={formData.triggerWord}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none"
+              />
+            </div>
 
-        {/* Messages */}
-        {error && <p className="text-red-300 text-center mt-4">{error}</p>}
-        {message && <p className="text-green-300 text-center mt-4">{message}</p>}
+            <button
+              type="submit"
+              className="w-full mt-4 bg-green-800 text-white py-2 rounded-lg hover:bg-green-900 transition"
+            >
+              Sign Up
+            </button>
+          </form>
 
-        <p className="text-center text-white/80 mt-6 text-sm">
-          Already have an account?{" "}
-          <a href="/login" className="text-white font-semibold hover:underline">
-            Log In
-          </a>
-        </p>
+          {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
+          {message && <p className="text-green-600 text-sm mt-4">{message}</p>}
+
+          <p className="text-sm text-center mt-6">
+            Already have an account?{" "}
+            <button
+              onClick={() => navigate("/login")}
+              className="text-green-700 font-medium hover:underline"
+            >
+              Log In
+            </button>
+          </p>
+        </div>
+
+        {/* Right Image Section */}
+        <div className="hidden md:block">
+          <img
+            src={signupImage}
+            alt="Signup visual"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </motion.div>
     </div>
   );
