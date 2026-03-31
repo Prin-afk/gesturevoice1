@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { saveAs } from "file-saver";
 import { useNavigate } from "react-router-dom";
-
+ import jsPDF from "jspdf";
 
 const BACKEND_URL = "http://localhost:4000/gestures";
 
@@ -102,7 +102,9 @@ const Learning = () => {
     }, 1000);
   };
 
-  const downloadResults = () => {
+
+
+const downloadResults = () => {
     const blob = new Blob(
       [
         `GestureVoice Test Results\n\nScore: ${score}/15\n\nDate: ${new Date().toLocaleString()}\nThank you for learning with GestureVoice!`,

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Lottie from "lottie-react";
+import humanAnimation from "../assets/human.json";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,44 +29,79 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-       {/* Back Button */}
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364]">
+
+      {/* 🔙 Back Button */}
       <button
         onClick={() => navigate("/")}
-        className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 backdrop-blur-md text-gray-700 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition"
+        className="absolute top-6 left-6 bg-white/20 text-white px-4 py-2 rounded-full backdrop-blur-lg hover:bg-white/30 transition"
       >
         ← Back
       </button>
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-6 rounded shadow w-96"
+
+      {/* 🧍 Human Animation */}
+      <motion.div
+        initial={{ x: -300, opacity: 0 }}
+        animate={{ x: -50, opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="hidden md:block absolute left-10"
       >
-        <h2 className="text-xl font-semibold mb-4 text-center">Login</h2>
+        <Lottie
+          animationData={humanAnimation}
+          loop={true}
+          style={{ width: 250 }}
+        />
+      </motion.div>
 
-        {error && <p className="text-red-500 text-center mb-2">{error}</p>}
+      {/* 📦 Login Card (Dragged Effect) */}
+      <motion.form
+        onSubmit={handleLogin}
+        initial={{ x: -600, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1.2 }}
+        className="backdrop-blur-xl bg-white/10 border border-white/20 p-8 rounded-2xl shadow-2xl w-96 text-white"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Welcome Back 👋
+        </h2>
 
+        {error && (
+          <p className="text-red-400 text-center mb-3">{error}</p>
+        )}
+
+        {/* Email */}
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-2 border mb-3"
+          className="w-full p-3 mb-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
 
+        {/* Password */}
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-2 border mb-4"
+          className="w-full p-3 mb-6 rounded-lg bg-white/20 border border-white/30 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
-        <button className="w-full bg-green-700 text-white py-2 rounded">
+        {/* Login Button */}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 py-3 rounded-lg font-semibold shadow-lg"
+        >
           Login
-        </button>
-      </form>
+        </motion.button>
+
+        <p className="text-center text-sm mt-4 text-white/70">
+          Secure Login System
+        </p>
+      </motion.form>
     </div>
   );
 };

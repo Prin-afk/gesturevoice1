@@ -57,7 +57,7 @@ const Home = () => {
             </button>
 
             <button
-              onClick={() => navigate("/try-gesture")}
+              onClick={() => navigate("/sign-to-text")}
               className="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-3 rounded-lg transition shadow"
             >
               Try Gesture Text & Voice

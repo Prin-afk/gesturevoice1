@@ -1,1 +1,8 @@
-{}
+{
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "framer-motion": "^12.34.0",
+    "jspdf": "^4.1.0",
+    "react-icons": "^5.5.0"
+  }
+}

@@ -3,11 +3,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const chatRoutes = require("./routes/chatRoutes");
 
 // ✅ Translation library
 const { translate } = require('@vitalets/google-translate-api');
 
 const app = express();
+const recognizeRoutes = require("./routes/recognize");
+app.use("/api/recognize", recognizeRoutes);
 
 // ---------------- CONFIG ----------------
 const PORT = process.env.PORT || 4000;
@@ -38,6 +41,7 @@ app.get('/health', (req, res) => {
 try {
   app.use('/api/auth', require('./routes/auth'));
   app.use('/api/user', require('./routes/user'));
+  app.use('/api/chat', require('./routes/chatRoutes'));
   app.use('/api/recognize', require('./routes/recognize'));
   app.use('/api/alert', require('./routes/alert'));
   app.use('/api/learning', require('./routes/learning'));

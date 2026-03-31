@@ -1,90 +1,34 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-const fs = require('fs');
-const say = require('say');
-const auth = require('../middleware/auth');
-const axios = require('axios');
-const { default: translate } = require('@vitalets/google-translate-api');
+const multer = require("multer");
+const axios = require("axios");
+const fs = require("fs");
 
-const TRIGGER_WORDS = ['help', 'fire', 'danger', 'emergency'];
+const upload = multer({ dest: "uploads/" });
 
-// ---------- Mock recognition ----------
-function mockRecognizeFromFilename(filename) {
-  const name = (filename || '').toLowerCase();
-  if (TRIGGER_WORDS.some(w => name.includes(w))) return { text: 'help', isTrigger: true };
-  const wordMatch = name.match(/[a-z]+/);
-  return { text: wordMatch ? wordMatch[0] : 'unknown', isTrigger: false };
-}
-
-// ---------- TTS ----------
-function speakText(text) {
-  if (!text) return;
-  try { say.speak(String(text)); } 
-  catch (err) { console.error('TTS error:', err.message); }
-}
-
-// ---------- Translation ----------
-async function translateTextLibre(text, targetLang = 'hi') {
+router.post("/image", upload.single("image"), async (req, res) => {
   try {
-    if (!text) return '';
-    const OVERRIDES = {
-      help: { hi: 'मदद', ml: 'സഹായം', ta: 'உதவி' },
-      fire: { hi: 'आग', ml: 'തീ', ta: 'தீ' },
-      danger: { hi: 'खतरा', ml: 'അപായം', ta: 'ஆபத்து' },
-      emergency: { hi: 'आपातकाल', ml: 'അപത്കാലം', ta: 'அவசரம்' },
-    };
-    const lower = text.toLowerCase();
-    if (OVERRIDES[lower]) return OVERRIDES[lower][targetLang] || '';
-    return (await translate(text, { to: targetLang }))?.text || '';
-  } catch (err) { return ''; }
-}
-
-// ---------- Main recognize route ----------
-router.post('/', auth, upload.single('image'), async (req, res) => {
-  try {
-    let recognized = { text: 'unknown', isTrigger: false };
-
-    if (req.file) {
-      recognized = mockRecognizeFromFilename(req.file.originalname || req.file.filename);
-      fs.unlink(req.file.path, () => {});
-    } else if (req.body?.textManual) {
-      recognized = { text: String(req.body.textManual).trim(), isTrigger: false };
-    } else {
-      return res.status(400).json({ error: 'No image or text provided' });
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
     }
 
-    const rawText = String(recognized.text || '').trim();
-    const isTrigger = TRIGGER_WORDS.includes(rawText.toLowerCase());
+    const imagePath = req.file.path;
 
-    speakText(rawText);
+    const response = await axios.post(
+      "http://127.0.0.1:5001/predict",
+      { imagePath },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
-    // Trigger SMS alert if a trigger word
-    if (isTrigger) {
-      try {
-        await axios.post(
-          'http://localhost:4000/api/alert/send',
-          { recognizedText: rawText, lat: req.body.lat, lng: req.body.lng },
-          { headers: { Authorization: req.headers.authorization } }
-        );
-      } catch (err) {
-        console.error('❌ Error sending SMS alert:', err.response?.data || err.message);
-      }
-    }
+    fs.unlink(imagePath, () => {}); // delete temp image
 
-    // Translations
-    const translations = {};
-    const langMap = { hindi: 'hi', malayalam: 'ml', tamil: 'ta' };
-    for (const [key, code] of Object.entries(langMap)) {
-      translations[key] = await translateTextLibre(rawText, code);
-    }
-
-    return res.json({ recognizedText: rawText, isTrigger, translations });
-
+    res.json({
+      recognizedText: response.data.recognizedText,
+      confidence: response.data.confidence,
+    });
   } catch (err) {
-    console.error('recognize route error:', err.message);
-    return res.status(500).json({ error: 'Server error during recognition' });
+    console.error("Recognition error:", err.message);
+    res.status(500).json({ error: "Prediction failed" });
   }
 });
 
