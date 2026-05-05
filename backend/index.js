@@ -13,7 +13,7 @@ const recognizeRoutes = require("./routes/recognize");
 app.use("/api/recognize", recognizeRoutes);
 
 // ---------------- CONFIG ----------------
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || '*';
 
 // ---------------- CORS SETUP ----------------
@@ -36,13 +36,15 @@ app.use('/gestures', express.static(path.join(__dirname, 'uploads', 'gestures'))
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
-
+app.get('/', (req, res) => {
+  res.send('GestureVoice Backend is running 🚀');
+});
 // ---------------- ROUTES ----------------
 try {
   app.use('/api/auth', require('./routes/auth'));
   app.use('/api/user', require('./routes/user'));
   app.use('/api/chat', require('./routes/chatRoutes'));
-  app.use('/api/recognize', require('./routes/recognize'));
+  
   app.use('/api/alert', require('./routes/alert'));
   app.use('/api/learning', require('./routes/learning'));
   app.use('/emergency', require('./routes/emergency'));
