@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+
+  backend-node:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.node
+    container_name: backend-node
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+    command: npm run dev
+
+  backend-python:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.python
+    container_name: backend-python
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    command: python app.py
+
+  sign-backend:
+    build: ./sign-backend
+    container_name: sign-backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./sign-backend:/app
+    command: python app.py
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    command: npm start

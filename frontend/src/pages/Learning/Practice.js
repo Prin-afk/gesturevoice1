@@ -1,16 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const ALL_GESTURES = [
+  "A","B","C","D","E","F","G","H","I","J",
+  "K","L","M","N","O","P","Q","R","S","T",
+  "U","V","W","X","Y","Z"
+];
 
-const Practice = () => {
-  const [currentLetter, setCurrentLetter] = useState(
-    letters[Math.floor(Math.random() * letters.length)]
-  );
-  const [userAnswer, setUserAnswer] = useState("");
-  const [result, setResult] = useState("");
+// 5 letters per level
+const getLevelGestures = (level) => {
+  const start = (level - 1) * 5;
+  return ALL_GESTURES.slice(start, start + 5);
+};
+
+const Practice = ({ level, back, onDone }) => {
+  const [gestures, setGestures] = useState([]);
+  const [index, setIndex] = useState(0);
   const [cameraActive, setCameraActive] = useState(false);
   const [preview, setPreview] = useState(null);
   const videoRef = useRef(null);
+
+  useEffect(() => {
+    setGestures(getLevelGestures(level));
+    setIndex(0);
+    setPreview(null);
+  }, [level]);
 
   const handleCameraToggle = async () => {
     if (cameraActive) {
@@ -24,7 +37,7 @@ const Practice = () => {
     }
   };
 
-  const captureFrame = async () => {
+  const captureFrame = () => {
     if (!cameraActive || !videoRef.current) return alert("Camera not active!");
     const canvas = document.createElement("canvas");
     const video = videoRef.current;
@@ -35,24 +48,16 @@ const Practice = () => {
     setPreview(base64Image);
   };
 
-  const handleCheck = () => {
-    if (userAnswer.trim().toUpperCase() === currentLetter) {
-      setResult("✅ Correct!");
-      setTimeout(() => {
-        setCurrentLetter(letters[Math.floor(Math.random() * letters.length)]);
-        setResult("");
-        setUserAnswer("");
-      }, 1500);
-    } else {
-      setResult("❌ Try again!");
-    }
-  };
-
   return (
     <div className="text-center space-y-6">
-      <h2 className="text-2xl font-bold">Gesture Practice Space</h2>
-      <p className="text-lg">Show the gesture for: <strong>{currentLetter}</strong></p>
+      <h2 className="text-2xl font-bold">✋ Practice - Level {level}</h2>
 
+      {/* CURRENT LETTER */}
+      <div className="text-6xl bg-white text-black inline-block px-10 py-6 rounded-2xl shadow">
+        {gestures[index]}
+      </div>
+
+      {/* CAMERA */}
       <div className="flex flex-col items-center">
         <video
           ref={videoRef}
@@ -62,36 +67,71 @@ const Practice = () => {
           width="480"
           height="360"
         />
-        {preview && <img src={preview} alt="Captured" className="w-48 rounded-lg border mb-3" />}
+
+        {preview && (
+          <img
+            src={preview}
+            alt="Captured"
+            className="w-48 rounded-lg border mb-3"
+          />
+        )}
+
         <div className="flex gap-3">
-          <button onClick={handleCameraToggle} className="px-4 py-2 bg-blue-600 rounded-lg">
+          <button
+            onClick={handleCameraToggle}
+            className="px-4 py-2 bg-blue-600 rounded-lg text-white"
+          >
             {cameraActive ? "Close Camera" : "Open Camera"}
           </button>
+
           {cameraActive && (
-            <button onClick={captureFrame} className="px-4 py-2 bg-green-600 rounded-lg">
+            <button
+              onClick={captureFrame}
+              className="px-4 py-2 bg-green-600 rounded-lg text-white"
+            >
               Capture
             </button>
           )}
         </div>
       </div>
 
+      {/* NAVIGATION */}
       <div>
-        <input
-          type="text"
-          placeholder="Type recognized letter..."
-          value={userAnswer}
-          onChange={(e) => setUserAnswer(e.target.value)}
-          className="p-2 rounded-lg text-black"
-        />
         <button
-          onClick={handleCheck}
-          className="ml-3 px-4 py-2 bg-purple-600 rounded-lg text-white"
+          onClick={() => setIndex(index - 1)}
+          disabled={index === 0}
+          className="px-4 py-2 bg-indigo-600 rounded-lg text-white mr-3 disabled:opacity-50"
         >
-          Check
+          ⬅ Prev
+        </button>
+
+        <button
+          onClick={() => setIndex(index + 1)}
+          disabled={index === gestures.length - 1}
+          className="px-4 py-2 bg-indigo-600 rounded-lg text-white disabled:opacity-50"
+        >
+          Next ➡
         </button>
       </div>
 
-      {result && <p className="text-lg font-semibold mt-2">{result}</p>}
+      {/* FINISH LEVEL */}
+      <div className="mt-4">
+        {index === gestures.length - 1 && (
+          <button
+            onClick={onDone}
+            className="px-6 py-3 bg-green-600 rounded-lg text-white mr-3"
+          >
+            ✅ Go to Test
+          </button>
+        )}
+
+        <button
+          onClick={back}
+          className="px-6 py-3 bg-gray-600 rounded-lg text-white"
+        >
+          ⬅ Back
+        </button>
+      </div>
     </div>
   );
 };

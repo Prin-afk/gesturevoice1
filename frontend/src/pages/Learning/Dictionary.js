@@ -1,48 +1,74 @@
 import React from "react";
 
-const alphabetImages = Array.from({ length: 26 }, (_, i) => ({
-  letter: String.fromCharCode(65 + i),
-  image: `/gestures/${String.fromCharCode(65 + i)}.jpg`,
-}));
-const numberImages = Array.from({ length: 10 }, (_, i) => ({
-  letter: i.toString(),
-  image: `/gestures/${i}.jpg`,
-}));
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-const Dictionary = () => {
+export default function Dictionary({ back }) {
+
   return (
-    <div className="p-4 space-y-6">
-      <h2 className="text-2xl font-bold text-center">Gesture Dictionary</h2>
+    <div className="text-center">
 
-      <h3 className="text-xl font-semibold">Alphabets (A–Z)</h3>
-      <div className="grid grid-cols-6 gap-4">
-        {alphabetImages.map((item) => (
-          <div key={item.letter} className="text-center">
-            <img
-              src={item.image}
-              alt={item.letter}
-              className="rounded-lg border w-24 h-24 object-cover mx-auto"
-            />
-            <p className="mt-1">{item.letter}</p>
-          </div>
-        ))}
+      <h1 className="text-4xl font-bold mb-8">
+        📘 Learning Dictionary
+      </h1>
+
+      {/* ===== Demo Video Section ===== */}
+
+      <div className="mb-10">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          🎥 Sign Language Demo
+        </h2>
+
+        <video
+          controls
+          className="mx-auto rounded-lg shadow-lg w-96"
+        >
+          <source
+            src="/videos/videoplayback.mp4"
+            type="video/mp4"
+          />
+        </video>
+
       </div>
 
-      <h3 className="text-xl font-semibold mt-6">Numbers (0–9)</h3>
-      <div className="grid grid-cols-6 gap-4">
-        {numberImages.map((item) => (
-          <div key={item.letter} className="text-center">
+
+      {/* ===== Alphabet Images ===== */}
+
+      <div className="grid grid-cols-3 gap-8 px-10">
+
+        {letters.map((letter) => (
+
+          <div
+            key={letter}
+            className="bg-white p-6 rounded-xl shadow-lg"
+          >
+
             <img
-              src={item.image}
-              alt={item.letter}
-              className="rounded-lg border w-24 h-24 object-cover mx-auto"
+              src={`/gestures/${letter}.jpg`}
+              alt={letter}
+              className="w-40 h-40 mx-auto object-contain"
             />
-            <p className="mt-1">{item.letter}</p>
+
+            <p className="text-2xl font-bold mt-4">
+              {letter}
+            </p>
+
           </div>
+
         ))}
+
       </div>
+
+
+      {/* ===== Back Button ===== */}
+
+      <button
+        onClick={back}
+        className="mt-10 bg-green-500 px-5 py-2 rounded text-white"
+      >
+        ⬅ Back
+      </button>
+
     </div>
   );
-};
-
-export default Dictionary;
+}

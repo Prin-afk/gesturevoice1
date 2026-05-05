@@ -1,0 +1,28 @@
+# =========================
+# IGNORE EVERYTHING FIRST
+# =========================
+*
+
+# =========================
+# ALLOW ONLY REQUIRED FILES
+# =========================
+!package.json
+!package-lock.json
+!*.js
+!*.json
+!*.py
+!app.py
+!requirements.txt
+!src/
+!routes/
+!controllers/
+!utils/
+!config/
+
+# =========================
+# STILL IGNORE THESE
+# =========================
+node_modules
+__pycache__
+*.pyc
+.git

@@ -1,0 +1,99 @@
+# =========================
+# Node / Frontend
+# =========================
+node_modules/
+frontend/node_modules/
+frontend/build/
+frontend/.cache/
+frontend/.next/
+frontend/out/
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# =========================
+# Models (VERY IMPORTANT - LARGE FILES)
+# =========================
+models/
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.onnx
+*.pb
+*.tflite
+
+# =========================
+# Uploads / Gestures / Images
+# =========================
+uploads/
+gestures/
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# =========================
+# Videos / Dataset
+# =========================
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+data/
+dataset/
+videos/
+images/
+
+# =========================
+# Logs
+# =========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# OS / System Files
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =========================
+# Git
+# =========================
+.git/
+.gitignore
+
+# =========================
+# Docker (optional ignore)
+# =========================
+Dockerfile*
+docker-compose.yml
+docker-compose.override.yml
+
+# =========================
+# Misc
+# =========================
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+cache/
+dist/
+build/
+temp/
