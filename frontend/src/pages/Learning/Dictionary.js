@@ -40,7 +40,7 @@ export default function Dictionary({ back }) {
 
           <div
             key={letter}
-            className="bg-white p-6 rounded-xl shadow-lg"
+            className="bg-grey p-6 rounded-xl shadow-lg"
           >
 
             <img
@@ -48,6 +48,9 @@ export default function Dictionary({ back }) {
               alt={letter}
               className="w-40 h-40 mx-auto object-contain"
             />
+            <div className="absolute top-2 left-2 bg-black/70 text-white text-xl font-bold px-3 py-1 rounded-lg">
+              {letter}
+            </div>
 
             <p className="text-2xl font-bold mt-4">
               {letter}

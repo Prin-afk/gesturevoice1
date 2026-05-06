@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const chatRoutes = require("./routes/chatRoutes");
-
+const leaderboardRoutes = require("./routes/leaderboard");
 // ✅ Translation library
 const { translate } = require('@vitalets/google-translate-api');
 
@@ -48,6 +48,7 @@ try {
   app.use('/api/alert', require('./routes/alert'));
   app.use('/api/learning', require('./routes/learning'));
   app.use('/emergency', require('./routes/emergency'));
+    app.use("/leaderboard", leaderboardRoutes);
 } catch (e) {
   console.error('Error loading routes. Make sure route files exist in ./routes:', e);
 }
